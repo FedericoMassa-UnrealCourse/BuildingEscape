@@ -2,6 +2,8 @@
 
 #include "BuildingEscape.h"
 #include "Grabber.h"
+#include "Engine/World.h"
+#include "DrawDebugHelpers.h"
 
 #define OUT
 
@@ -22,6 +24,28 @@ void UGrabber::BeginPlay()
 	Super::BeginPlay();
 	UE_LOG(LogTemp, Warning, TEXT("Grabber reporting for duty!"));
 	
+	/// Look for attached PhysicsHandle component
+	PhysicsHandle = GetOwner()->FindComponentByClass<UPhysicsHandleComponent>();
+	
+	if (PhysicsHandle)
+	{
+		// ...
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("Cannot find a PhysicsHandleComponent in actor %s"), *GetOwner()->GetName());
+	}
+
+	/// Look for attached input component (appears at run-time)
+	InputComponent = GetOwner()->FindComponentByClass<UInputComponent>();
+	if (InputComponent)
+	{
+		InputComponent->BindAction("Grab", IE_Pressed, this, &UGrabber::Grab);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("Cannot find an InputComponent in actor %s"), *GetOwner()->GetName());
+	}
 }
 
 
@@ -77,3 +101,7 @@ void UGrabber::TickComponent( float DeltaTime, ELevelTick TickType, FActorCompon
 
 }
 
+void UGrabber::Grab()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Grabbing!"));
+}
