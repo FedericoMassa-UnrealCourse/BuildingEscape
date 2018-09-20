@@ -32,6 +32,10 @@ private:
 	UPhysicsHandleComponent* PhysicsHandle = nullptr;
 	UInputComponent* InputComponent = nullptr;
 
+	// Get line trace start and end vector, i.e. the vector from the character to the maximum reach
+	FVector GetReachLineStart();
+	FVector GetReachLineEnd();
+
 	// Ray-cast and grab what is reached
 	void Grab();
 
