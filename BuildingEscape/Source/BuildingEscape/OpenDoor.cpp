@@ -23,7 +23,14 @@ void UOpenDoor::BeginPlay()
 {
 	Super::BeginPlay();
 
+	if (!PressurePlate)
+	{
+		UE_LOG(LogTemp, Error, TEXT("%s has no attached TriggerVolume!"), *GetOwner()->GetName());
+	}
+
 	Owner = GetOwner();
+	if (!Owner)
+		UE_LOG(LogTemp, Error, TEXT("OpenDoor component without owner??"));
 }
 
 void UOpenDoor::OpenDoor()
@@ -61,6 +68,9 @@ float UOpenDoor::GetTotalMassOfActorsOnPlate() const
 
 	// Find all overlapping actors
 	TArray<AActor*> OverlappingActors;
+
+	if (!PressurePlate) return TotalMass;
+
 	PressurePlate->GetOverlappingActors(OUT OverlappingActors);
 	// Iterate through them adding all the masses
 
@@ -79,6 +89,5 @@ float UOpenDoor::GetTotalMassOfActorsOnPlate() const
 		}
 	}
 
-	UE_LOG(LogTemp, Warning, TEXT("Total mass on plate: %f"), TotalMass);
 	return TotalMass;
 }
